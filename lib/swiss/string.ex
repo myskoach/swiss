@@ -1,0 +1,83 @@
+defmodule Swiss.String do
+  @moduledoc """
+  A few extra functions to deal with Strings. Heavily inspired by lodash.
+  """
+
+  @word_regex ~r/[^\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/
+  @upper_word_regex ~r/(^[A-Z]+$)|[A-Z][a-z0-9]*/
+
+  @doc """
+  Deburrs a string from unicode to its ascii equivalent.
+
+  ## Examples
+      iex> Swiss.String.deburr "hola señor!"
+      "hola senor!"
+  """
+  @spec deburr(String.t) :: String.t
+  def deburr(string) do
+    string
+    |> :unicode.characters_to_nfd_binary()
+    |> String.replace(~r/[^\x00-\x7F]/u, "")
+  end
+
+  @doc """
+  Decomposes a string into an array of its words.
+
+  ## Examples
+      iex> Swiss.String.words "FredBarney"
+      ["Fred", "Barney"]
+      iex> Swiss.String.words "fred, barney, & pebbles"
+      ["fred", "barney", "pebbles"]
+      iex> Swiss.String.words "fred, barney, & pebbles", ~r/[^, ]+/
+      ["fred", "barney", "&", "pebbles"]
+  """
+  @spec words(String.t, Regex.t) :: [String.t]
+  def words(string, pattern \\ @word_regex) do
+    string
+    |> String.split(pattern, trim: true, include_captures: true)
+    |> Enum.filter(&String.match?(&1, pattern))
+    |> Enum.flat_map(&String.split(&1, @upper_word_regex, trim: true, include_captures: true))
+  end
+
+  @doc """
+  Converts a string into kebab-case.
+
+  ## Examples
+      iex> Swiss.String.kebab_case "Foo Bar"
+      "foo-bar"
+      iex> Swiss.String.kebab_case "--foo-bar--"
+      "foo-bar"
+      iex> Swiss.String.kebab_case "__FOO_BAR__"
+      "foo-bar"
+      iex> Swiss.String.kebab_case "FooBar"
+      "foo-bar"
+  """
+  @spec kebab_case(String.t) :: String.t
+  def kebab_case(string) do
+    string
+    |> deburr()
+    |> words()
+    |> Enum.map(&String.downcase/1)
+    |> Enum.join("-")
+  end
+
+  @doc """
+  Converts a string into snake_case.
+
+  ## Examples
+      iex> Swiss.String.snake_case "Foo Bar"
+      "foo_bar"
+      iex> Swiss.String.snake_case "--foo-bar--"
+      "foo_bar"
+      iex> Swiss.String.snake_case "__FOO_BAR__"
+      "foo_bar"
+  """
+  @spec snake_case(String.t) :: String.t
+  def snake_case(string) do
+    string
+    |> deburr()
+    |> String.downcase()
+    |> words()
+    |> Enum.join("_")
+  end
+end
