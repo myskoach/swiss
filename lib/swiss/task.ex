@@ -46,7 +46,7 @@ defmodule Swiss.Task do
           def async_stream(enumerable, fun, opts \\ []) do
             parent = self()
             Task.async_stream(enumerable, fn arg ->
-              Ecto.Adapters.SQL.Sandbox.allow(SkoachBot.Repo, parent, self())
+              Ecto.Adapters.SQL.Sandbox.allow(unquote(repo), parent, self())
               fun.(arg)
             end, opts)
           end
