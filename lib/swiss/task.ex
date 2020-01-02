@@ -42,10 +42,20 @@ defmodule Swiss.Task do
               fun.()
             end)
           end
+
+          def async_stream(enumerable, fun, opts \\ []) do
+            parent = self()
+            Task.async_stream(enumerable, fn arg ->
+              Ecto.Adapters.SQL.Sandbox.allow(SkoachBot.Repo, parent, self())
+              fun.(arg)
+            end, opts)
+          end
         end
       _ ->
         quote do
           defdelegate async(fun), to: Task
+          defdelegate async_stream(enumerable, fun), to: Task
+          defdelegate async_stream(enumerable, fun, opts), to: Task
         end
     end
   end
