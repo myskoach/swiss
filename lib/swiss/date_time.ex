@@ -70,4 +70,21 @@ defmodule Swiss.DateTime do
     end)
     |> List.first()
   end
+
+  @doc """
+  Converts a ISO 8601 date into a DateTime and offset.
+
+  This is a wrapper around `DateTime.from_iso8601/2` that raises on error.
+
+  ## Examples
+      iex> Swiss.DateTime.from_iso8601!("2015-01-23T23:50:07Z")
+      {~U[2015-01-23 23:50:07Z], 0}
+  """
+  @spec from_iso8601!(String.t()) :: {DateTime.t(), integer()}
+  def from_iso8601!(iso_date, calendar \\ Calendar.ISO) do
+    case DateTime.from_iso8601(iso_date, calendar) do
+      {:ok, dt, offset} -> {dt, offset}
+      {:error, error} -> raise error
+    end
+  end
 end
