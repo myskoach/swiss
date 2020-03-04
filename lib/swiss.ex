@@ -5,17 +5,34 @@ defmodule Swiss do
   Swiss is a bundle of extensions to the standard lib. It includes several
   helper functions for dealing with standard types.
 
-  ### Examples
-
-      iex> Swiss.String.kebab_case("Patat Special")
-      "patat-special"
-
-      iex> Swiss.DateTime.second_utc_now()
-      #DateTime<2019-10-10 10:20:46Z>
-
   ## API
 
-  The root module has no functions; check each sub-module's docs for each type's
-  API.
+  The root module has generic helper functions; check each sub-module's docs for
+  each type's API.
   """
+
+  @doc """
+  Applies the given `func` to `value` and returns its result.
+
+  ### Examples
+
+      iex> Swiss.thru(42, &(12 + &1))
+      54
+  """
+  @spec thru(value :: any(), func :: function()) :: any()
+  def thru(value, func), do: func.(value)
+
+  @doc """
+  Applies the given `func` to `value` and returns value.
+
+  ### Examples
+
+      iex> Swiss.tap(42, &(12 + &1))
+      42
+  """
+  @spec tap(value :: any(), func :: function()) :: any()
+  def tap(value, func) do
+    func.(value)
+    value
+  end
 end
