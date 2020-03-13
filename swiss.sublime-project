@@ -12,5 +12,9 @@
         "erl_crash.dump"
       ]
 		}
-	]
+	],
+  "settings":
+  {
+    "default_line_ending": "unix"
+  }
 }
