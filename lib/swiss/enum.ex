@@ -11,9 +11,15 @@ defmodule Swiss.Enum do
 
       iex> Swiss.Enum.find_by([%{life: 11}, %{life: 42}], 42, :wat, 42)
       42
+
+      iex> Swiss.Enum.find_by([%Swiss.TestStruct{life: 42}], :life, 42)
+      %Swiss.TestStruct{life: 42}
   """
   def find_by(enumerable, default \\ nil, key, value) do
-    Enum.find(enumerable, default, fn el -> el[key] == value end)
+    Enum.find(enumerable, default, fn
+      %_{} = el -> Map.get(el, key) == value
+      el -> el[key] == value
+    end)
   end
 
   @doc """
