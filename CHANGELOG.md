@@ -1,3 +1,8 @@
+# 2.2.0
+
+Re-adds `Enum.thru/2`. Not redundant with `Enum.each/2` since it returns the
+original enum instead of `:ok` 🤦🏼‍♂️.
+
 # 2.1.0
 
 Adds `Enum.find_by/3` and `Enum.find_by/4`.
