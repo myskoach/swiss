@@ -34,4 +34,22 @@ defmodule Swiss.Enum do
     :ok = Enum.each(enum, cb)
     enum
   end
+
+  @doc """
+  Same as `Enum.group_by/3` but expects each group to have a single element, and
+  therefore returns only that element per key, instead of a list.
+
+  ## Examples
+      iex> Swiss.Enum.group_by_single(
+      ...>   [%{k: "life", v: 42}, %{k: "death", v: 13}, %{k: "ooo", v: 0}],
+      ...>   & &1.k,
+      ...>   & &1.v
+      ...> )
+      %{"life" => 42, "death" => 13, "ooo" => 0}
+  """
+  def group_by_single(enum, key_fn, value_fn \\ fn x -> x end) do
+    enum
+    |> Enum.group_by(key_fn, value_fn)
+    |> Enum.reduce(%{}, fn {key, [value]}, acc -> Map.put(acc, key, value) end)
+  end
 end
