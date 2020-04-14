@@ -1,6 +1,13 @@
 defmodule Swiss.Enum do
+  @moduledoc """
+  Helper functions for dealing with Enumerables.
+  """
+
+  alias Swiss.Enum.KeyValueError
+
   @doc """
   Finds the first element in `enumerable` where its `key` equals `value`.
+  Returns `default` if not found.
 
   ### Examples
       iex> Swiss.Enum.find_by([%{life: 11}, %{life: 42}], :life, 42)
@@ -15,11 +22,31 @@ defmodule Swiss.Enum do
       iex> Swiss.Enum.find_by([%Swiss.TestStruct{life: 42}], :life, 42)
       %Swiss.TestStruct{life: 42}
   """
+  @spec find_by(Enumerable.t(), any(), any(), any()) :: any()
   def find_by(enumerable, default \\ nil, key, value) do
     Enum.find(enumerable, default, fn
       %_{} = el -> Map.get(el, key) == value
       el -> el[key] == value
     end)
+  end
+
+  @doc """
+  Finds the first element in `enumerable` where its `key` equals `value`. Raises
+  if not found.
+
+  ### Examples
+      iex> Swiss.Enum.find_by!([%{life: 11}, %{life: 42}], :life, 42)
+      %{life: 42}
+
+      iex> Swiss.Enum.find_by!([%{life: 11}, %{life: 42}], :wat, 42)
+      ** (Swiss.Enum.KeyValueError) key :wat with value 42 not found in: [%{life: 11}, %{life: 42}]
+  """
+  @spec find_by!(Enumerable.t(), any(), any()) :: any()
+  def find_by!(enumerable, key, value) do
+    case Swiss.Enum.find_by(enumerable, :not_found, key, value) do
+      :not_found -> raise %KeyValueError{key: key, value: value, term: enumerable}
+      el -> el
+    end
   end
 
   @doc """
