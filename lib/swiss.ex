@@ -35,4 +35,18 @@ defmodule Swiss do
     func.(value)
     value
   end
+
+  @doc """
+  Wrapper that makes any function usable directly in `Kernel.get_in/2`.
+
+  ### Examples
+
+      iex> get_in([%{"life" => 42}], [Swiss.nextable(&List.first/1), "life"])
+      42
+  """
+  def nextable(fun) do
+    fn :get, el, next ->
+      next.(fun.(el))
+    end
+  end
 end
