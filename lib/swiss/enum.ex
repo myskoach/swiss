@@ -50,6 +50,26 @@ defmodule Swiss.Enum do
   end
 
   @doc """
+  Finds an element and its index in `enumerable` for which `fun` returns true.
+
+  ### Examples
+      iex> Swiss.Enum.find_both([42, 44, 46], fn num -> num == 44 end)
+      {44, 1}
+
+      iex> Swiss.Enum.find_both([42, 44, 46], fn num -> num == 45 end)
+      nil
+  """
+  def find_both(enumerable, fun) do
+    enumerable
+    |> Stream.with_index()
+    |> Enum.reduce_while(nil, fn {el, idx}, nil ->
+      if fun.(el),
+        do: {:halt, {el, idx}},
+        else: {:cont, nil}
+    end)
+  end
+
+  @doc """
   Applies `cb` to all elements in `enum`, ignores the return and returns `enum`.
 
   ## Examples
