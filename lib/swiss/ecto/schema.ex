@@ -5,7 +5,7 @@ defmodule Swiss.Ecto.Schema do
 
   @doc "Converts an Ecto struct into a map, including embeds"
   @spec to_map(struct()) :: map()
-  def to_map(schema) do
+  def to_map(%_{} = schema) do
     schema
     |> Map.from_struct()
     |> Enum.filter(fn
@@ -25,4 +25,7 @@ defmodule Swiss.Ecto.Schema do
     end)
     |> Enum.into(%{})
   end
+
+  def to_map(val),
+    do: val
 end
