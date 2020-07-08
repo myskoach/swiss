@@ -57,15 +57,15 @@ defmodule Swiss.Enum do
       {44, 1}
 
       iex> Swiss.Enum.find_both([42, 44, 46], fn num -> num == 45 end)
-      nil
+      {nil, nil}
   """
   def find_both(enumerable, fun) do
     enumerable
     |> Stream.with_index()
-    |> Enum.reduce_while(nil, fn {el, idx}, nil ->
+    |> Enum.reduce_while({nil, nil}, fn {el, idx}, {nil, nil} ->
       if fun.(el),
         do: {:halt, {el, idx}},
-        else: {:cont, nil}
+        else: {:cont, {nil, nil}}
     end)
   end
 
