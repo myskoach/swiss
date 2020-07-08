@@ -7,6 +7,7 @@ defmodule Swiss.Ecto.SchemaTest do
     embedded_schema do
       field(:value, :integer, default: 42)
       field(:map, :map)
+      field(:arr, {:array, :string})
 
       embeds_one :simple_embed, SimpleEmbed do
         field(:value, :integer)
@@ -22,6 +23,7 @@ defmodule Swiss.Ecto.SchemaTest do
     test "converts an ecto struct to a map" do
       str = %Swiss.Ecto.TestSchema{
         map: %{"life" => 42},
+        arr: ["one", "two"],
         simple_embed: %Swiss.Ecto.TestSchema.SimpleEmbed{
           value: 42
         },
@@ -33,6 +35,7 @@ defmodule Swiss.Ecto.SchemaTest do
 
       assert Elixir.Swiss.Ecto.Schema.to_map(str) == %{
                map: %{"life" => 42},
+               arr: ["one", "two"],
                value: 42,
                simple_embed: %{
                  value: 42
