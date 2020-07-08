@@ -5,7 +5,7 @@ defmodule Swiss.MixProject do
     [
       app: :swiss,
       description: "Swiss is a bundle of extensions to the standard lib.",
-      version: "2.7.0",
+      version: "2.8.0",
       elixir: "~> 1.8",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -38,6 +38,9 @@ defmodule Swiss.MixProject do
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
-    [{:ex_doc, ">= 0.0.0", only: :dev, runtime: false}]
+    [
+      {:ecto, ">= 3.0.0", optional: true},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
+    ]
   end
 end
