@@ -13,7 +13,7 @@ defmodule Swiss.String do
       iex> Swiss.String.deburr "hola señor!"
       "hola senor!"
   """
-  @spec deburr(String.t) :: String.t
+  @spec deburr(String.t()) :: String.t()
   def deburr(string) do
     string
     |> :unicode.characters_to_nfd_binary()
@@ -31,7 +31,7 @@ defmodule Swiss.String do
       iex> Swiss.String.words "fred, barney, & pebbles", ~r/[^, ]+/
       ["fred", "barney", "&", "pebbles"]
   """
-  @spec words(String.t, Regex.t) :: [String.t]
+  @spec words(String.t(), Regex.t()) :: [String.t()]
   def words(string, pattern \\ @word_regex) do
     string
     |> String.split(pattern, trim: true, include_captures: true)
@@ -52,7 +52,7 @@ defmodule Swiss.String do
       iex> Swiss.String.kebab_case "FooBar"
       "foo-bar"
   """
-  @spec kebab_case(String.t) :: String.t
+  @spec kebab_case(String.t()) :: String.t()
   def kebab_case(string) do
     string
     |> deburr()
@@ -72,12 +72,25 @@ defmodule Swiss.String do
       iex> Swiss.String.snake_case "__FOO_BAR__"
       "foo_bar"
   """
-  @spec snake_case(String.t) :: String.t
+  @spec snake_case(String.t()) :: String.t()
   def snake_case(string) do
     string
     |> deburr()
     |> String.downcase()
     |> words()
     |> Enum.join("_")
+  end
+
+  @doc """
+  Inserts a substring into another string at the given position.
+
+  ## Examples
+      iex> Swiss.String.insert_at "Banas", 2, "na"
+      "Bananas"
+  """
+  @spec insert_at(String.t(), non_neg_integer(), String.t()) :: String.t()
+  def insert_at(string, pos, substr) do
+    {left, right} = String.split_at(string, pos)
+    left <> substr <> right
   end
 end
