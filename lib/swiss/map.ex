@@ -69,4 +69,43 @@ defmodule Swiss.Map do
       end
     end)
   end
+
+  @doc """
+  Deep merges two maps. Only maps are merged, all other types are overriden.
+
+      iex> Swiss.Map.deep_merge(%{user: %{id: 42}}, %{user: %{name: "João"}})
+      %{user: %{id: 42, name: "João"}}
+
+      iex> Swiss.Map.deep_merge(
+      ...> %{user: %{id: 42, message: %{id: 22}}},
+      ...> %{user: %{message: %{text: "hi"}}},
+      ...> 1
+      ...> )
+      %{user: %{id: 42, message: %{text: "hi"}}}
+
+      iex> Swiss.Map.deep_merge(
+      ...> %{user: %{id: 42}, messages: [%{id: 1}]},
+      ...> %{user: %{id: 30, age: 40}, messages: [%{id: 2}]}
+      ...> )
+      %{user: %{id: 30, age: 40}, messages: [%{id: 2}]}
+  """
+  @spec deep_merge(map(), map(), non_neg_integer() | :infinity) :: map()
+  def deep_merge(map_dest, map_src, max_depth \\ :infinity) do
+    deep_merge(map_dest, map_src, max_depth, 0)
+  end
+
+  defp deep_merge(map_dest, map_src, max_depth, depth)
+       when is_number(max_depth) and max_depth <= depth do
+    Map.merge(map_dest, map_src)
+  end
+
+  defp deep_merge(map_dest, map_src, max_depth, depth) do
+    Map.merge(map_dest, map_src, fn
+      _key, value_dest, value_src when is_map(value_dest) and is_map(value_src) ->
+        deep_merge(value_dest, value_src, max_depth, depth + 1)
+
+      _key, _value_dest, value_src ->
+        value_src
+    end)
+  end
 end
