@@ -71,6 +71,33 @@ defmodule Swiss.Map do
   end
 
   @doc """
+  Runs `Map.put/3` only if `pred` returns truthy when called on the value.
+
+  The default behavior is to put unless the value is `nil`.
+
+  ## Examples
+      iex> Swiss.Map.put_if(%{life: 42}, :life, 22)
+      %{life: 22}
+
+      iex> Swiss.Map.put_if(%{life: 42}, :life, nil)
+      %{life: 42}
+
+      iex> Swiss.Map.put_if(%{life: 42}, :life, nil, &is_nil/1)
+      %{life: nil}
+
+      iex> Swiss.Map.put_if(%{life: 42}, :life, 22, &(&1 < 55))
+      %{life: 22}
+  """
+  @spec put_if(map(), any(), any(), (any() -> boolean())) :: map()
+  def put_if(map, key, value, pred \\ fn v -> !is_nil(v) end) do
+    if pred.(value) do
+      Map.put(map, key, value)
+    else
+      map
+    end
+  end
+
+  @doc """
   Deep merges two maps. Only maps are merged, all other types are overriden.
 
       iex> Swiss.Map.deep_merge(%{user: %{id: 42}}, %{user: %{name: "João"}})
