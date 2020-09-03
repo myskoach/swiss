@@ -57,7 +57,7 @@ defmodule Swiss.String do
     string
     |> deburr()
     |> words()
-    |> Enum.map(&String.downcase/1)
+    |> Stream.map(&String.downcase/1)
     |> Enum.join("-")
   end
 
@@ -71,13 +71,15 @@ defmodule Swiss.String do
       "foo_bar"
       iex> Swiss.String.snake_case "__FOO_BAR__"
       "foo_bar"
+      iex> Swiss.String.snake_case "FooBar"
+      "foo_bar"
   """
   @spec snake_case(String.t()) :: String.t()
   def snake_case(string) do
     string
     |> deburr()
-    |> String.downcase()
     |> words()
+    |> Stream.map(&String.downcase/1)
     |> Enum.join("_")
   end
 
