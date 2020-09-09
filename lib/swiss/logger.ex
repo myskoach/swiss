@@ -10,10 +10,10 @@ defmodule Swiss.Logger do
     do: deep_merge_metadata(logger, Enum.into(metadata, %{}))
 
   def deep_merge_metadata(logger, metadata) when is_map(metadata) do
-    existing =
-      logger.metadata()
-      |> Enum.into(%{})
-
-    logger.metadata(Swiss.Map.deep_merge(existing, metadata))
+    logger.metadata()
+    |> Enum.into(%{})
+    |> Swiss.Map.deep_merge(metadata)
+    |> Enum.into([])
+    |> logger.metadata()
   end
 end
