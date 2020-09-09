@@ -9,7 +9,7 @@ defmodule Swiss.LoggerTest do
     end
 
     test "deep merges maps in metadata" do
-      Logger.metadata(%{context: %{user: %{id: 42}}})
+      Logger.metadata(context: %{user: %{id: 42}})
 
       # Sanity check
       assert Logger.metadata() == [context: %{user: %{id: 42}}]
