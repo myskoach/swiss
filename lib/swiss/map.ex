@@ -4,6 +4,26 @@ defmodule Swiss.Map do
   """
 
   @doc """
+  Applies defaults to a map.
+
+  ## Examples
+      iex> Swiss.Map.defaults(%{a: 42}, %{b: 12})
+      %{a: 42, b: 12}
+
+      iex> Swiss.Map.defaults(%{a: 42}, %{a: 44, b: 12})
+      %{a: 42, b: 12}
+
+      iex> Swiss.Map.defaults(%{a: 42, c: nil}, [a: nil, b: 12, c: 13])
+      %{a: 42, b: 12, c: nil}
+  """
+  @spec defaults(Map.t(), Map.t() | keyword()) :: Map.t()
+  def defaults(map, defaults) when is_list(defaults),
+    do: defaults(map, Enum.into(defaults, %{}))
+
+  def defaults(map, defaults) when is_map(defaults),
+    do: Map.merge(defaults, map)
+
+  @doc """
   Wrapper around `Map.from_struct/1` that tolerates `nil`.
 
   ## Examples
