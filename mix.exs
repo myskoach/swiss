@@ -5,8 +5,8 @@ defmodule Swiss.MixProject do
     [
       app: :swiss,
       description: "Swiss is a bundle of extensions to the standard lib.",
-      version: "2.12.2",
       elixir: "~> 1.9",
+      version: "2.13.0",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
