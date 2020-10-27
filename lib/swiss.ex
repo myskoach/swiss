@@ -37,6 +37,24 @@ defmodule Swiss do
   end
 
   @doc """
+  More idiomatic `!is_nil/1`.
+
+  ### Examples
+
+      iex> Swiss.is_present(nil)
+      false
+
+      iex> Swiss.is_present([])
+      true
+
+      iex> Swiss.is_present(42)
+      true
+  """
+  @spec is_present(val :: any()) :: boolean()
+  def is_present(val),
+    do: !is_nil(val)
+
+  @doc """
   Wrapper that makes any function usable directly in `Kernel.get_in/2`.
 
   ### Examples
