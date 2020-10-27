@@ -37,6 +37,56 @@ defmodule Swiss do
   end
 
   @doc """
+  Applies the given `apply_fn` to the given `value` if the given `predicate_fn`
+  returns true.
+
+  By default, `predicate_fn` is `is_present/1`.
+
+  ### Examples
+
+      iex> Swiss.apply_if(42, &(&1 + 8))
+      50
+
+      iex> Swiss.apply_if(42, &(&1 + 8), &(&1 > 40))
+      50
+
+      iex> Swiss.apply_if(42, &(&1 + 8), &(&1 < 40))
+      42
+  """
+  @spec apply_if(value :: any(), apply_fn :: function(), predicate_fn :: function()) :: any()
+  def apply_if(val, apply_fn, predicate_fn \\ &is_present/1) do
+    if predicate_fn.(val),
+      do: apply_fn.(val),
+      else: val
+  end
+
+  @doc """
+  Applies the given `apply_fn` to the given `value` unless the given
+  `predicate_fn` returns true.
+
+  By default, `predicate_fn` is `is_nil/1`.
+
+  ### Examples
+
+      iex> Swiss.apply_unless(nil, &(&1 + 8))
+      nil
+
+      iex> Swiss.apply_unless(42, &(&1 + 8))
+      50
+
+      iex> Swiss.apply_unless(42, &(&1 + 8), &(&1 > 40))
+      42
+
+      iex> Swiss.apply_unless(42, &(&1 + 8), &(&1 < 40))
+      50
+  """
+  def apply_unless(val, apply_fn, predicate_fn \\ &is_nil/1) do
+    if predicate_fn.(val),
+      do: val,
+      else: apply_fn.(val)
+  end
+
+  @doc """
   More idiomatic `!is_nil/1`.
 
   ### Examples
