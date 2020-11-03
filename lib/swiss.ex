@@ -12,6 +12,26 @@ defmodule Swiss do
   """
 
   @doc """
+  More idiomatic `!is_nil/1`. Defined as a macro so it can be used in guards.
+
+  ### Examples
+
+      iex> Swiss.is_present(nil)
+      false
+
+      iex> Swiss.is_present([])
+      true
+
+      iex> Swiss.is_present(42)
+      true
+  """
+  defmacro is_present(val) do
+    quote do
+      not is_nil(unquote(val))
+    end
+  end
+
+  @doc """
   Applies the given `func` to `value` and returns its result.
 
   ### Examples
@@ -85,24 +105,6 @@ defmodule Swiss do
       do: val,
       else: apply_fn.(val)
   end
-
-  @doc """
-  More idiomatic `!is_nil/1`.
-
-  ### Examples
-
-      iex> Swiss.is_present(nil)
-      false
-
-      iex> Swiss.is_present([])
-      true
-
-      iex> Swiss.is_present(42)
-      true
-  """
-  @spec is_present(val :: any()) :: boolean()
-  def is_present(val),
-    do: !is_nil(val)
 
   @doc """
   Wrapper that makes any function usable directly in `Kernel.get_in/2`.
