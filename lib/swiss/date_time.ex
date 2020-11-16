@@ -7,7 +7,7 @@ defmodule Swiss.DateTime do
   @doc """
   Helper method for getting "now" with second precision.
   """
-  @spec second_utc_now() :: DateTime.t
+  @spec second_utc_now() :: DateTime.t()
   def second_utc_now(),
     do: DateTime.utc_now() |> DateTime.truncate(:second)
 
@@ -31,12 +31,15 @@ defmodule Swiss.DateTime do
 
       iex> Swiss.DateTime.max([DateTime.from_unix!(2_464_096_360), nil])
       ~U[2048-01-31 15:12:40Z]
+
+      iex> Swiss.DateTime.max([nil, nil, ~U[2020-11-09 09:00:50Z]])
+      ~U[2020-11-09 09:00:50Z]
   """
   @spec max([DateTime.t()]) :: DateTime.t()
   def max(dates) when is_list(dates) do
     dates
     |> Enum.sort(fn date_1, date_2 ->
-      is_nil(date_1) || is_nil(date_2) || DateTime.compare(date_1, date_2) != :lt
+      is_nil(date_2) || (!is_nil(date_1) && DateTime.compare(date_1, date_2) != :lt)
     end)
     |> List.first()
   end
@@ -61,12 +64,15 @@ defmodule Swiss.DateTime do
 
       iex> Swiss.DateTime.min([DateTime.from_unix!(2_464_096_360), nil])
       ~U[2048-01-31 15:12:40Z]
+
+      iex> Swiss.DateTime.min([nil, nil, ~U[2020-11-09 09:00:50Z]])
+      ~U[2020-11-09 09:00:50Z]
   """
   @spec min([DateTime.t()]) :: DateTime.t()
   def min(dates) when is_list(dates) do
     dates
     |> Enum.sort(fn date_1, date_2 ->
-      is_nil(date_1) || is_nil(date_2) || DateTime.compare(date_1, date_2) == :lt
+      is_nil(date_2) || (!is_nil(date_1) && DateTime.compare(date_1, date_2) == :lt)
     end)
     |> List.first()
   end
