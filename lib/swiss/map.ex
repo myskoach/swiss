@@ -118,6 +118,27 @@ defmodule Swiss.Map do
   end
 
   @doc """
+  Runs `Map.put/3` only if `cond` is truthy. Unlike `Swiss.Map.put_if/4`, takes
+  a function that is called when the condition passes, that should return the
+  value to insert in the map.
+
+  ## Examples
+      iex> Swiss.Map.put_if_lazy(%{life: 42}, :life, fn -> 12 end, true)
+      %{life: 12}
+
+      iex> Swiss.Map.put_if_lazy(%{life: 42}, :life, fn -> 12 end, false)
+      %{life: 42}
+  """
+  @spec put_if_lazy(map(), any(), (() -> any()), any()) :: map()
+  def put_if_lazy(map, key, value_fn, condition) do
+    if condition do
+      Map.put(map, key, value_fn.())
+    else
+      map
+    end
+  end
+
+  @doc """
   Deep merges two maps. Only maps are merged, all other types are overriden.
 
       iex> Swiss.Map.deep_merge(%{user: %{id: 42}}, %{user: %{name: "João"}})
