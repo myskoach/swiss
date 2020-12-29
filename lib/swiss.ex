@@ -72,10 +72,25 @@ defmodule Swiss do
 
       iex> Swiss.apply_if(42, &(&1 + 8), &(&1 < 40))
       42
+
+      iex> Swiss.apply_if(42, &(&1 + 8), true)
+      50
+
+      iex> Swiss.apply_if(42, &(&1 + 8), false)
+      42
   """
-  @spec apply_if(value :: any(), apply_fn :: function(), predicate_fn :: function()) :: any()
-  def apply_if(val, apply_fn, predicate_fn \\ &is_present/1) do
-    if predicate_fn.(val),
+  @spec apply_if(
+          value :: any(),
+          apply_fn :: (any() -> any()),
+          predicate_fn :: (any() -> boolean())
+        ) :: any()
+  def apply_if(val, apply_fn, predicate_fn \\ &is_present/1)
+
+  def apply_if(val, apply_fn, predicate_fn) when is_function(predicate_fn, 1),
+    do: apply_if(val, apply_fn, predicate_fn.(val))
+
+  def apply_if(val, apply_fn, condition) when is_boolean(condition) do
+    if condition,
       do: apply_fn.(val),
       else: val
   end
@@ -99,9 +114,25 @@ defmodule Swiss do
 
       iex> Swiss.apply_unless(42, &(&1 + 8), &(&1 < 40))
       50
+
+      iex> Swiss.apply_unless(42, &(&1 + 8), false)
+      50
+
+      iex> Swiss.apply_unless(42, &(&1 + 8), true)
+      42
   """
-  def apply_unless(val, apply_fn, predicate_fn \\ &is_nil/1) do
-    if predicate_fn.(val),
+  @spec apply_unless(
+          value :: any(),
+          apply_fn :: (any() -> any()),
+          predicate_fn :: (any() -> boolean())
+        ) :: any()
+  def apply_unless(val, apply_fn, predicate_fn \\ &is_nil/1)
+
+  def apply_unless(val, apply_fn, predicate_fn) when is_function(predicate_fn, 1),
+    do: apply_unless(val, apply_fn, predicate_fn.(val))
+
+  def apply_unless(val, apply_fn, condition) when is_boolean(condition) do
+    if condition,
       do: val,
       else: apply_fn.(val)
   end
