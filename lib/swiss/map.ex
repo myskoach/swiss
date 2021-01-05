@@ -141,6 +141,7 @@ defmodule Swiss.Map do
   @doc """
   Deep merges two maps. Only maps are merged, all other types are overriden.
 
+  ## Examples
       iex> Swiss.Map.deep_merge(%{user: %{id: 42}}, %{user: %{name: "João"}})
       %{user: %{id: 42, name: "João"}}
 
@@ -174,6 +175,29 @@ defmodule Swiss.Map do
 
       _key, _value_dest, value_src ->
         value_src
+    end)
+  end
+
+  @doc """
+  Appplies an updater function to all keys in the given map.
+
+  The updater function receives a `{key, value}` tuple and may return a new
+  value, or a new `{key, value}` tuple.
+
+  ## Examples
+      iex> Swiss.Map.update_all(%{a: 1, b: 2}, &(elem(&1, 1) * 2))
+      %{a: 2, b: 4}
+
+      iex> Swiss.Map.update_all(%{a: 1, b: 2}, &{Atom.to_string(elem(&1, 0)), elem(&1, 1) * 3})
+      %{"a" => 3, "b" => 6}
+  """
+  @spec update_all(map(), ({any(), any()} -> {any(), any()} | any())) :: map()
+  def update_all(map, updater) do
+    Enum.reduce(map, %{}, fn {key, value}, acc ->
+      case updater.({key, value}) do
+        {new_key, new_value} -> Map.put(acc, new_key, new_value)
+        new_value -> Map.put(acc, key, new_value)
+      end
     end)
   end
 end

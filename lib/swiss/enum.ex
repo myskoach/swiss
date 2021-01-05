@@ -94,9 +94,65 @@ defmodule Swiss.Enum do
       ...> )
       %{"life" => 42, "death" => 13, "ooo" => 0}
   """
+  @spec group_by_single(Enumerable.t(), (any() -> any()), (any() -> any())) :: map()
   def group_by_single(enum, key_fn, value_fn \\ fn x -> x end) do
     enum
     |> Enum.group_by(key_fn, value_fn)
     |> Enum.reduce(%{}, fn {key, [value]}, acc -> Map.put(acc, key, value) end)
+  end
+
+  @doc """
+  Calculates the average of values in an enumerable. Currently supports maps and
+  lists only.
+
+  ## Examples
+      iex> Swiss.Enum.avg([1, 2, 3, 4])
+      2.5
+
+      iex> Swiss.Enum.avg([%{key: 1}, %{key: 2}, %{key: 3}, %{key: 4}], & &1.key)
+      2.5
+
+      iex> Swiss.Enum.avg(%{a: 1, b: 2, c: 3, d: 4}, &elem(&1, 1))
+      2.5
+
+      iex> Swiss.Enum.avg(%{})
+      0
+
+      iex> Swiss.Enum.avg([])
+      0
+  """
+  @spec avg(list() | map(), (any() -> number())) :: number()
+  def avg(enum, mapper \\ & &1)
+
+  def avg([], _),
+    do: 0
+
+  def avg(list, mapper) when is_list(list) do
+    Enum.reduce(list, 0, &(mapper.(&1) + &2)) / length(list)
+  end
+
+  def avg(map, _) when is_map(map) and map_size(map) == 0,
+    do: 0
+
+  def avg(map, mapper) when is_map(map) do
+    Enum.reduce(map, 0, &(mapper.(&1) + &2)) / map_size(map)
+  end
+
+  @doc """
+  Finds the index of a value inside an enumerable.
+
+  ## Examples
+      iex> Swiss.Enum.index_of([1, 2, 3, 4], 3)
+      2
+
+      iex> Swiss.Enum.index_of([1, 2, 3, 4], 1)
+      0
+
+      iex> Swiss.Enum.index_of([1, 2, 3, 4], 5)
+      nil
+  """
+  @spec index_of(Enumerable.t(), any()) :: non_neg_integer() | nil
+  def index_of(enum, value) do
+    Enum.find_index(enum, &(&1 == value))
   end
 end
