@@ -3,34 +3,28 @@
 Swiss is a bundle of extensions to the standard lib. It includes several helper
 functions for dealing with standard types.
 
+Check out the [API Reference](https://hexdocs.pm/swiss/api-reference.html) for the full module list & examples.
+
 ### Examples
 
     iex> Swiss.String.kebab_case("PatatSpecial")
     "patat-special"
 
-    iex> Swiss.DateTime.second_utc_now()
-    ?
-
-## API
-
-The root module has no functions; check each sub-module's docs for each type's
-API.
-"""
+    iex> Swiss.Enum.find_by([%{key: 1}, %{key: 2}], :key, 1)
+    %{key: 1}
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `swiss` to your list of dependencies in `mix.exs`:
+Add `swiss` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:swiss, "~> 3.3.0"}
+    {:swiss, "~> 3.4.0"}
   ]
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/swiss](https://hexdocs.pm/swiss).
+## Contributing
 
+PRs welcome, unit tests required.
