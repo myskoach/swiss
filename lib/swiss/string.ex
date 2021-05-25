@@ -89,8 +89,11 @@ defmodule Swiss.String do
   ## Examples
       iex> Swiss.String.insert_at "Banas", 2, "na"
       "Bananas"
+
+      iex> Swiss.String.insert_at "800", -2, "."
+      "8.00"
   """
-  @spec insert_at(String.t(), non_neg_integer(), String.t()) :: String.t()
+  @spec insert_at(String.t(), integer(), String.t()) :: String.t()
   def insert_at(string, pos, substr) do
     {left, right} = String.split_at(string, pos)
     left <> substr <> right
