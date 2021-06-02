@@ -25,8 +25,7 @@ defmodule Swiss.Ecto do
   @spec assoc_present?(assoc :: term(), accept_nil? :: boolean) :: boolean()
   def assoc_present?(assoc, accept_nil? \\ false)
   def assoc_present?(nil, accept_nil?), do: accept_nil?
-  def assoc_present?(%Ecto.Association.NotLoaded{}, _), do: false
-  def assoc_present?(%_{}, _), do: true
+  def assoc_present?(%module{}, _), do: module !== Ecto.Association.NotLoaded
   def assoc_present?(assoc, _) when is_list(assoc), do: true
   def assoc_present?(assoc, _), do: raise("unexpected assoc type: #{inspect(assoc)}")
 end

@@ -9,7 +9,7 @@ defmodule Swiss.Ecto.Schema do
     schema
     |> Map.from_struct()
     |> Enum.filter(fn
-      {_, %Ecto.Association.NotLoaded{}} -> false
+      {_, %module{}} when module == Ecto.Association.NotLoaded -> false
       {_, nil} -> false
       _ -> true
     end)
