@@ -84,6 +84,42 @@ defmodule Swiss.String do
   end
 
   @doc """
+  Converts a string to Capital Case.
+
+  ## Options
+  * `:deburr`: whether to deburr (remove accents, etc.) the given string. `true`
+               by default, for consistency with the other functions in this
+               module.
+
+  ## Examples
+      iex> Swiss.String.start_case "Foo Bar"
+      "Foo Bar"
+
+      iex> Swiss.String.start_case "--foo-bar--"
+      "Foo Bar"
+
+      iex> Swiss.String.start_case "__FOO_BAR__"
+      "Foo Bar"
+
+      iex> Swiss.String.start_case "FooBar"
+      "Foo Bar"
+
+      iex> Swiss.String.start_case "hola señor"
+      "Hola Senor"
+
+      iex> Swiss.String.start_case "hola señor", deburr: false
+      "Hola Señor"
+  """
+  @spec start_case(String.t(), keyword()) :: String.t()
+  def start_case(string, opts \\ []) do
+    string
+    |> Swiss.apply_if(&deburr/1, Keyword.get(opts, :deburr, true))
+    |> words()
+    |> Stream.map(&String.capitalize/1)
+    |> Enum.join(" ")
+  end
+
+  @doc """
   Inserts a substring into another string at the given position.
 
   ## Examples
