@@ -7,9 +7,11 @@ defmodule Swiss.Enum do
 
   @doc """
   Finds the first element in `enumerable` where its `key` equals `value`.
+
   Returns `default` if not found.
 
   ### Examples
+
       iex> Swiss.Enum.find_by([%{life: 11}, %{life: 42}], :life, 42)
       %{life: 42}
 
@@ -21,6 +23,7 @@ defmodule Swiss.Enum do
 
       iex> Swiss.Enum.find_by([%Swiss.TestStruct{life: 42}], :life, 42)
       %Swiss.TestStruct{life: 42}
+
   """
   @spec find_by(Enumerable.t(), any(), any(), any()) :: any()
   def find_by(enumerable, default \\ nil, key, value) do
@@ -31,15 +34,18 @@ defmodule Swiss.Enum do
   end
 
   @doc """
-  Finds the first element in `enumerable` where its `key` equals `value`. Raises
-  if not found.
+  Finds the first element in `enumerable` where its `key` equals `value`.
+
+  Raises if not found.
 
   ### Examples
+
       iex> Swiss.Enum.find_by!([%{life: 11}, %{life: 42}], :life, 42)
       %{life: 42}
 
       iex> Swiss.Enum.find_by!([%{life: 11}, %{life: 42}], :wat, 42)
       ** (Swiss.Enum.KeyValueError) key :wat with value 42 not found in: [%{life: 11}, %{life: 42}]
+
   """
   @spec find_by!(Enumerable.t(), any(), any()) :: any()
   def find_by!(enumerable, key, value) do
@@ -53,11 +59,13 @@ defmodule Swiss.Enum do
   Finds an element and its index in `enumerable` for which `fun` returns true.
 
   ### Examples
+
       iex> Swiss.Enum.find_both([42, 44, 46], fn num -> num == 44 end)
       {44, 1}
 
       iex> Swiss.Enum.find_both([42, 44, 46], fn num -> num == 45 end)
       {nil, nil}
+
   """
   def find_both(enumerable, fun) do
     enumerable
@@ -73,8 +81,10 @@ defmodule Swiss.Enum do
   Applies `cb` to all elements in `enum`, ignores the return and returns `enum`.
 
   ## Examples
+
       iex> Swiss.Enum.thru([1, 2, 3], fn a -> a + 1 end)
       [1, 2, 3]
+
   """
   @spec thru(Enumerable.t(), function) :: Enumerable.t()
   def thru(enum, cb) do
@@ -87,12 +97,14 @@ defmodule Swiss.Enum do
   therefore returns only that element per key, instead of a list.
 
   ## Examples
+
       iex> Swiss.Enum.group_by_single(
       ...>   [%{k: "life", v: 42}, %{k: "death", v: 13}, %{k: "ooo", v: 0}],
       ...>   & &1.k,
       ...>   & &1.v
       ...> )
       %{"life" => 42, "death" => 13, "ooo" => 0}
+
   """
   @spec group_by_single(Enumerable.t(), (any() -> any()), (any() -> any())) :: map()
   def group_by_single(enum, key_fn, value_fn \\ fn x -> x end) do
@@ -106,6 +118,7 @@ defmodule Swiss.Enum do
   lists only.
 
   ## Examples
+
       iex> Swiss.Enum.avg([1, 2, 3, 4])
       2.5
 
@@ -120,6 +133,7 @@ defmodule Swiss.Enum do
 
       iex> Swiss.Enum.avg([])
       0
+
   """
   @spec avg(list() | map(), (any() -> number())) :: number()
   def avg(enum, mapper \\ & &1)
@@ -142,6 +156,7 @@ defmodule Swiss.Enum do
   Finds the index of a value inside an enumerable.
 
   ## Examples
+
       iex> Swiss.Enum.index_of([1, 2, 3, 4], 3)
       2
 
@@ -150,6 +165,7 @@ defmodule Swiss.Enum do
 
       iex> Swiss.Enum.index_of([1, 2, 3, 4], 5)
       nil
+
   """
   @spec index_of(Enumerable.t(), any()) :: non_neg_integer() | nil
   def index_of(enum, value) do

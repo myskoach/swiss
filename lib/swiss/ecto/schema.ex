@@ -3,7 +3,9 @@ defmodule Swiss.Ecto.Schema do
   Helper functions for handling ecto schemas.
   """
 
-  @doc "Converts an Ecto struct into a map, including embeds"
+  @doc """
+  Converts an Ecto struct into a map, including embeds.
+  """
   @spec to_map(struct()) :: map()
   def to_map(%_{} = schema) do
     schema

@@ -15,8 +15,10 @@ defmodule Swiss.DateTime do
   Returns the biggest (latest) of two dates.
 
   ## Examples
+
       iex> Swiss.DateTime.max(DateTime.from_unix!(1_577_664_000), DateTime.from_unix!(1_464_096_368))
       ~U[2019-12-30 00:00:00Z]
+
   """
   @spec max(DateTime.t(), DateTime.t()) :: DateTime.t()
   def max(date_1, date_2),
@@ -26,6 +28,7 @@ defmodule Swiss.DateTime do
   Returns the biggest (latest) of the given list of dates.
 
   ## Examples
+
       iex> Swiss.DateTime.max([DateTime.from_unix!(1_577_664_000), DateTime.from_unix!(2_464_096_360), DateTime.from_unix!(1_464_096_368)])
       ~U[2048-01-31 15:12:40Z]
 
@@ -34,6 +37,7 @@ defmodule Swiss.DateTime do
 
       iex> Swiss.DateTime.max([nil, nil, ~U[2020-11-09 09:00:50Z]])
       ~U[2020-11-09 09:00:50Z]
+
   """
   @spec max([DateTime.t()]) :: DateTime.t()
   def max(dates) when is_list(dates) do
@@ -48,8 +52,10 @@ defmodule Swiss.DateTime do
   Returns the smallest (earliest) of two dates.
 
   ## Examples
+
       iex> Swiss.DateTime.min(DateTime.from_unix!(1_577_664_000), DateTime.from_unix!(1_464_096_368))
       ~U[2016-05-24 13:26:08Z]
+
   """
   @spec min(DateTime.t(), DateTime.t()) :: DateTime.t()
   def min(date_1, date_2),
@@ -59,6 +65,7 @@ defmodule Swiss.DateTime do
   Returns the smallest (earliest) of the given list of dates.
 
   ## Examples
+
       iex> Swiss.DateTime.min([DateTime.from_unix!(1_577_664_000), DateTime.from_unix!(2_464_096_360), DateTime.from_unix!(1_464_096_368)])
       ~U[2016-05-24 13:26:08Z]
 
@@ -67,6 +74,7 @@ defmodule Swiss.DateTime do
 
       iex> Swiss.DateTime.min([nil, nil, ~U[2020-11-09 09:00:50Z]])
       ~U[2020-11-09 09:00:50Z]
+
   """
   @spec min([DateTime.t()]) :: DateTime.t()
   def min(dates) when is_list(dates) do
@@ -83,8 +91,10 @@ defmodule Swiss.DateTime do
   This is a wrapper around `DateTime.from_iso8601/2` that raises on error.
 
   ## Examples
+
       iex> Swiss.DateTime.from_iso8601!("2015-01-23T23:50:07Z")
       {~U[2015-01-23 23:50:07Z], 0}
+
   """
   @spec from_iso8601!(String.t()) :: {DateTime.t(), integer()}
   def from_iso8601!(iso_date, calendar \\ Calendar.ISO) do

@@ -7,6 +7,7 @@ defmodule Swiss.Map do
   Applies defaults to a map.
 
   ## Examples
+
       iex> Swiss.Map.defaults(%{a: 42}, %{b: 12})
       %{a: 42, b: 12}
 
@@ -15,6 +16,7 @@ defmodule Swiss.Map do
 
       iex> Swiss.Map.defaults(%{a: 42, c: nil}, [a: nil, b: 12, c: 13])
       %{a: 42, b: 12, c: nil}
+
   """
   @spec defaults(Map.t(), Map.t() | keyword()) :: Map.t()
   def defaults(map, defaults) when is_list(defaults),
@@ -27,11 +29,13 @@ defmodule Swiss.Map do
   Wrapper around `Map.from_struct/1` that tolerates `nil`.
 
   ## Examples
+
       iex> Swiss.Map.from_struct(nil)
       nil
 
       iex> Swiss.Map.from_struct(%{__struct__: SomeStruct, life: 42})
       %{life: 42}
+
   """
   @spec from_struct(struct | nil) :: Map.t() | nil
   def from_struct(nil), do: nil
@@ -41,11 +45,13 @@ defmodule Swiss.Map do
   Converts an atom-keyed map into a string-keyed map.
 
   ## Examples
+
       iex> Swiss.Map.to_string_keys(%{life: 42})
       %{"life" => 42}
 
       iex> Swiss.Map.to_string_keys(%{"life" => 42, death: 27})
       %{"life" => 42, "death" => 27}
+
   """
   @spec to_string_keys(Map.t()) :: Map.t()
   def to_string_keys(map) do
@@ -65,6 +71,7 @@ defmodule Swiss.Map do
   If both atom and String keys exist in the map, the atom's value is returned.
 
   ## Examples
+
       iex> Swiss.Map.indif_fetch!(%{life: 42}, :life)
       42
 
@@ -76,6 +83,7 @@ defmodule Swiss.Map do
 
       iex> Swiss.Map.indif_fetch!(%{}, :life)
       ** (KeyError) key :life not found in: %{}
+
   """
   @spec indif_fetch!(Map.t(), atom()) :: any()
   def indif_fetch!(map, key) when is_atom(key) do
@@ -96,6 +104,7 @@ defmodule Swiss.Map do
   The default behavior is to put unless the value is `nil`.
 
   ## Examples
+
       iex> Swiss.Map.put_if(%{life: 42}, :life, 22)
       %{life: 22}
 
@@ -107,6 +116,7 @@ defmodule Swiss.Map do
 
       iex> Swiss.Map.put_if(%{life: 42}, :life, 22, &(&1 < 55))
       %{life: 22}
+
   """
   @spec put_if(map(), any(), any(), (any() -> boolean())) :: map()
   def put_if(map, key, value, pred \\ fn v -> !is_nil(v) end) do
@@ -123,11 +133,13 @@ defmodule Swiss.Map do
   value to insert in the map.
 
   ## Examples
+
       iex> Swiss.Map.put_if_lazy(%{life: 42}, :life, fn -> 12 end, true)
       %{life: 12}
 
       iex> Swiss.Map.put_if_lazy(%{life: 42}, :life, fn -> 12 end, false)
       %{life: 42}
+
   """
   @spec put_if_lazy(map(), any(), (() -> any()), any()) :: map()
   def put_if_lazy(map, key, value_fn, condition) do
@@ -139,9 +151,10 @@ defmodule Swiss.Map do
   end
 
   @doc """
-  Deep merges two maps. Only maps are merged, all other types are overriden.
+  Deep merges two maps. Only maps are merged, all other types are overridden.
 
   ## Examples
+
       iex> Swiss.Map.deep_merge(%{user: %{id: 42}}, %{user: %{name: "João"}})
       %{user: %{id: 42, name: "João"}}
 
@@ -157,6 +170,7 @@ defmodule Swiss.Map do
       ...> %{user: %{id: 30, age: 40}, messages: [%{id: 2}]}
       ...> )
       %{user: %{id: 30, age: 40}, messages: [%{id: 2}]}
+
   """
   @spec deep_merge(map(), map(), non_neg_integer() | :infinity) :: map()
   def deep_merge(map_dest, map_src, max_depth \\ :infinity) do
@@ -185,11 +199,13 @@ defmodule Swiss.Map do
   value, or a new `{key, value}` tuple.
 
   ## Examples
+
       iex> Swiss.Map.update_all(%{a: 1, b: 2}, &(elem(&1, 1) * 2))
       %{a: 2, b: 4}
 
       iex> Swiss.Map.update_all(%{a: 1, b: 2}, &{Atom.to_string(elem(&1, 0)), elem(&1, 1) * 3})
       %{"a" => 3, "b" => 6}
+
   """
   @spec update_all(map(), ({any(), any()} -> {any(), any()} | any())) :: map()
   def update_all(map, updater) do

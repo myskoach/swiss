@@ -4,7 +4,8 @@ defmodule Swiss.Task do
   allowances to created processes. You should import this module and use its
   macros as a DSL.
 
-  ### Example
+  ### Examples
+
       defmodule YourProject.Task do
         @moduledoc "Defines the Task API for your project"
 
@@ -33,6 +34,7 @@ defmodule Swiss.Task do
           YourProject.Task.async_stream(enumerable, fn -> end)
         end
       end
+
   """
 
   @doc """
