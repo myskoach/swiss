@@ -7,6 +7,7 @@ defmodule Swiss.Ecto do
   Given an association field, returns whether it's preloaded.
 
   ### Examples
+
       iex> Swiss.Ecto.assoc_present?(nil)
       false
 
@@ -21,6 +22,7 @@ defmodule Swiss.Ecto do
 
       iex> Swiss.Ecto.assoc_present?(MapSet.new())
       true
+
   """
   @spec assoc_present?(assoc :: term(), accept_nil? :: boolean) :: boolean()
   def assoc_present?(assoc, accept_nil? \\ false)

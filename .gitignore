@@ -22,8 +22,5 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 swiss-*.tar
 
-# Ignore workspace
-swiss.sublime-workspace
-
-# Ignore elixir_ls folder
-.elixir_ls
+# Temporary files, for example, from tests.
+/tmp/

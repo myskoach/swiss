@@ -1,7 +1,8 @@
 defmodule Swiss.Logger do
   @doc """
-  Deep merges the given metadata into the existing logger's metadata. Use this
-  to extend existing context objects, for example.
+  Deep merges the given metadata into the existing logger's metadata.
+
+  Use this to extend existing context objects, for example.
   """
   @spec deep_merge_metadata(module(), map() | keyword()) :: :ok
   def deep_merge_metadata(logger \\ Logger, metadata)

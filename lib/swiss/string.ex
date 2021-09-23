@@ -10,8 +10,10 @@ defmodule Swiss.String do
   Deburrs a string from unicode to its ascii equivalent.
 
   ## Examples
+
       iex> Swiss.String.deburr "hola señor!"
       "hola senor!"
+
   """
   @spec deburr(String.t()) :: String.t()
   def deburr(string) do
@@ -24,12 +26,16 @@ defmodule Swiss.String do
   Decomposes a string into an array of its words.
 
   ## Examples
+
       iex> Swiss.String.words "FredBarney"
       ["Fred", "Barney"]
+
       iex> Swiss.String.words "fred, barney, & pebbles"
       ["fred", "barney", "pebbles"]
+
       iex> Swiss.String.words "fred, barney, & pebbles", ~r/[^, ]+/
       ["fred", "barney", "&", "pebbles"]
+
   """
   @spec words(String.t(), Regex.t()) :: [String.t()]
   def words(string, pattern \\ @word_regex) do
@@ -43,14 +49,19 @@ defmodule Swiss.String do
   Converts a string into kebab-case.
 
   ## Examples
+
       iex> Swiss.String.kebab_case "Foo Bar"
       "foo-bar"
+
       iex> Swiss.String.kebab_case "--foo-bar--"
       "foo-bar"
+
       iex> Swiss.String.kebab_case "__FOO_BAR__"
       "foo-bar"
+
       iex> Swiss.String.kebab_case "FooBar"
       "foo-bar"
+
   """
   @spec kebab_case(String.t()) :: String.t()
   def kebab_case(string) do
@@ -65,14 +76,19 @@ defmodule Swiss.String do
   Converts a string into snake_case.
 
   ## Examples
+
       iex> Swiss.String.snake_case "Foo Bar"
       "foo_bar"
+
       iex> Swiss.String.snake_case "--foo-bar--"
       "foo_bar"
+
       iex> Swiss.String.snake_case "__FOO_BAR__"
       "foo_bar"
+
       iex> Swiss.String.snake_case "FooBar"
       "foo_bar"
+
   """
   @spec snake_case(String.t()) :: String.t()
   def snake_case(string) do
@@ -87,11 +103,12 @@ defmodule Swiss.String do
   Converts a string to Capital Case.
 
   ## Options
-  * `:deburr`: whether to deburr (remove accents, etc.) the given string. `true`
-               by default, for consistency with the other functions in this
-               module.
+
+    * `:deburr`: whether to deburr (remove accents, etc.) the given string.
+      `true` by default, for consistency with the other functions in this module.
 
   ## Examples
+
       iex> Swiss.String.start_case "Foo Bar"
       "Foo Bar"
 
@@ -109,6 +126,7 @@ defmodule Swiss.String do
 
       iex> Swiss.String.start_case "hola señor", deburr: false
       "Hola Señor"
+
   """
   @spec start_case(String.t(), keyword()) :: String.t()
   def start_case(string, opts \\ []) do
@@ -123,11 +141,13 @@ defmodule Swiss.String do
   Inserts a substring into another string at the given position.
 
   ## Examples
+
       iex> Swiss.String.insert_at "Banas", 2, "na"
       "Bananas"
 
       iex> Swiss.String.insert_at "800", -2, "."
       "8.00"
+
   """
   @spec insert_at(String.t(), integer(), String.t()) :: String.t()
   def insert_at(string, pos, substr) do

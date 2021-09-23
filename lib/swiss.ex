@@ -24,6 +24,7 @@ defmodule Swiss do
 
       iex> Swiss.is_present(42)
       true
+
   """
   defmacro is_present(val) do
     quote do
@@ -49,6 +50,7 @@ defmodule Swiss do
 
       iex> Swiss.tap(42, &(12 + &1))
       42
+
   """
   @spec tap(value :: any(), func :: function()) :: any()
   def tap(value, func) do
@@ -78,6 +80,7 @@ defmodule Swiss do
 
       iex> Swiss.apply_if(42, &(&1 + 8), false)
       42
+
   """
   @spec apply_if(
           value :: any(),
@@ -120,6 +123,7 @@ defmodule Swiss do
 
       iex> Swiss.apply_unless(42, &(&1 + 8), true)
       42
+
   """
   @spec apply_unless(
           value :: any(),
@@ -144,6 +148,7 @@ defmodule Swiss do
 
       iex> get_in([%{"life" => 42}], [Swiss.nextable(&List.first/1), "life"])
       42
+
   """
   def nextable(fun) do
     fn :get, el, next ->
