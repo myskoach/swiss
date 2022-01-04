@@ -171,4 +171,33 @@ defmodule Swiss.Enum do
   def index_of(enum, value) do
     Enum.find_index(enum, &(&1 == value))
   end
+
+  @doc """
+  Reduces the given enumerable while its elements match `:ok` or `{:ok, _}`,
+  halting otherwise. Returns the last iterated term.
+
+  ## Examples
+
+      iex> Swiss.Enum.reduce_while_ok([:ok, :ok, :ok])
+      :ok
+
+      iex> Swiss.Enum.reduce_while_ok([:ok, {:ok, 15}])
+      {:ok, 15}
+
+      iex> Swiss.Enum.reduce_while_ok([:ok, {:ok, 15}, {:error, :oh_no}])
+      {:error, :oh_no}
+
+      iex> Swiss.Enum.reduce_while_ok([])
+      :ok
+  """
+  @spec reduce_while_ok(Enumerable.t()) :: :ok | {:ok, any()} | any()
+  def reduce_while_ok(enum) do
+    Enum.reduce_while(enum, :ok, fn val, _ret ->
+      case val do
+        :ok -> {:cont, :ok}
+        {:ok, _val} = ret -> {:cont, ret}
+        ret -> {:halt, ret}
+      end
+    end)
+  end
 end
