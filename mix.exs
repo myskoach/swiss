@@ -2,7 +2,7 @@ defmodule Swiss.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/myskoach/swiss"
-  @version "3.6.0"
+  @version "3.7.0"
 
   def project do
     [
@@ -50,7 +50,7 @@ defmodule Swiss.MixProject do
     [
       extras: [
         "CHANGELOG.md": [],
-        "LICENSE": [title: "License"],
+        LICENSE: [title: "License"],
         "README.md": [title: "Overview"]
       ],
       main: "readme",
