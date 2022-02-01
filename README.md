@@ -26,7 +26,7 @@ Add `:swiss` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:swiss, "~> 3.7.0"}
+    {:swiss, "~> 3.8.0"}
   ]
 end
 ```
