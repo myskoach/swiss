@@ -10,9 +10,8 @@ defmodule Swiss.Struct do
 
       iex> Swiss.Struct.to_params_map(%Swiss.TestStruct{life: 42})
       %{"life" => 42}
-
   """
-  @spec to_params_map(struct) :: Map.t
+  @spec to_params_map(struct) :: map()
   def to_params_map(struct) do
     struct
     |> Map.from_struct()

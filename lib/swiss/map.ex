@@ -193,6 +193,69 @@ defmodule Swiss.Map do
   end
 
   @doc """
+  Cuts off a map at the given depth.
+
+  This works for nested maps, but also maps nested in lists and tuples.
+
+  ## Options
+
+  * `max_depth´: Depth at which to cut off at. Defaults to 1.
+  * `placeholder`: Map values that would exceed the maximum depth are replaced by a placeholder. Defaults to an empty map.
+
+  ## Examples
+
+      iex> Swiss.Map.cut_depth(%{a: 1, b: 2})
+      %{a: 1, b: 2}
+
+      iex> Swiss.Map.cut_depth(%{a: %{c: 3, d: 4}, b: 2})
+      %{a: %{}, b: 2}
+
+      iex> Swiss.Map.cut_depth(%{a: %{c: 3, d: 4}, b: 2}, max_depth: 2)
+      %{a: %{c: 3, d: 4}, b: 2}
+
+      iex> Swiss.Map.cut_depth(%{a: %{c: 3, d: 4}, b: 2}, placeholder: "%{...}")
+      %{a: "%{...}", b: 2}
+
+      iex> Swiss.Map.cut_depth(%{a: [1, 2], b: [%{a: 2}], c: {1, 2}, d: {%{a: 5}}})
+      %{a: [1, 2], b: [%{}], c: {1, 2}, d: {%{}}}
+  """
+  @spec cut_depth(map :: map(), opts :: cut_depth_opts) :: map
+        when cut_depth_opts: [max_depth: non_neg_integer(), placeholder: any()]
+  def cut_depth(map, opts \\ []) when is_map(map) do
+    max_depth = opts[:max_depth] || 1
+    placeholder = opts[:placeholder] || %{}
+
+    cut_depth(map, max_depth, placeholder)
+  end
+
+  defp cut_depth(value, max_depth, placeholder, depth \\ 1)
+
+  defp cut_depth(lst, max_depth, placeholder, depth) when is_list(lst),
+    do: Enum.map(lst, &cut_depth(&1, max_depth, placeholder, depth))
+
+  defp cut_depth(map, max_depth, placeholder, depth) when is_map(map) do
+    if depth > max_depth do
+      placeholder
+    else
+      map
+      |> Enum.map(fn {key, map_value} ->
+        {key, cut_depth(map_value, max_depth, placeholder, depth + 1)}
+      end)
+      |> Enum.into(%{})
+    end
+  end
+
+  defp cut_depth(tuple, max_depth, placeholder, depth) when is_tuple(tuple) do
+    tuple
+    |> Tuple.to_list()
+    |> cut_depth(max_depth, placeholder, depth)
+    |> List.to_tuple()
+  end
+
+  defp cut_depth(value, _max_depth, _placeholder, _depth),
+    do: value
+
+  @doc """
   Appplies an updater function to all keys in the given map.
 
   The updater function receives a `{key, value}` tuple and may return a new
