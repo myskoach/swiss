@@ -4,6 +4,8 @@ defmodule Swiss.DateTime do
   or on Timex.
   """
 
+  import Swiss, only: [is_present: 1]
+
   @doc """
   Helper method for getting "now" with second precision.
   """
@@ -12,7 +14,7 @@ defmodule Swiss.DateTime do
     do: DateTime.utc_now() |> DateTime.truncate(:second)
 
   @doc """
-  Returns the biggest (latest) of two dates.
+  Returns the biggest (latest) of two datetimes.
 
   ## Examples
 
@@ -25,7 +27,7 @@ defmodule Swiss.DateTime do
     do: max([date_1, date_2])
 
   @doc """
-  Returns the biggest (latest) of the given list of dates.
+  Returns the biggest (latest) of the given list of datetimes.
 
   ## Examples
 
@@ -43,13 +45,13 @@ defmodule Swiss.DateTime do
   def max(dates) when is_list(dates) do
     dates
     |> Enum.sort(fn date_1, date_2 ->
-      is_nil(date_2) || (!is_nil(date_1) && DateTime.compare(date_1, date_2) != :lt)
+      is_nil(date_2) || (is_present(date_1) && DateTime.compare(date_1, date_2) != :lt)
     end)
     |> List.first()
   end
 
   @doc """
-  Returns the smallest (earliest) of two dates.
+  Returns the smallest (earliest) of two datetimes.
 
   ## Examples
 
@@ -62,7 +64,7 @@ defmodule Swiss.DateTime do
     do: min([date_1, date_2])
 
   @doc """
-  Returns the smallest (earliest) of the given list of dates.
+  Returns the smallest (earliest) of the given list of datetimes.
 
   ## Examples
 
@@ -80,7 +82,7 @@ defmodule Swiss.DateTime do
   def min(dates) when is_list(dates) do
     dates
     |> Enum.sort(fn date_1, date_2 ->
-      is_nil(date_2) || (!is_nil(date_1) && DateTime.compare(date_1, date_2) == :lt)
+      is_nil(date_2) || (is_present(date_1) && DateTime.compare(date_1, date_2) == :lt)
     end)
     |> List.first()
   end
