@@ -18,7 +18,7 @@ defmodule Swiss.Map do
       %{a: 42, b: 12, c: nil}
 
   """
-  @spec defaults(Map.t(), Map.t() | keyword()) :: Map.t()
+  @spec defaults(map(), map() | keyword()) :: map()
   def defaults(map, defaults) when is_list(defaults),
     do: defaults(map, Enum.into(defaults, %{}))
 
@@ -37,7 +37,7 @@ defmodule Swiss.Map do
       %{life: 42}
 
   """
-  @spec from_struct(struct | nil) :: Map.t() | nil
+  @spec from_struct(struct | nil) :: map() | nil
   def from_struct(nil), do: nil
   def from_struct(struct), do: Map.from_struct(struct)
 
@@ -53,7 +53,7 @@ defmodule Swiss.Map do
       %{"life" => 42, "death" => 27}
 
   """
-  @spec to_string_keys(Map.t()) :: Map.t()
+  @spec to_string_keys(map()) :: map()
   def to_string_keys(map) do
     map
     |> Map.to_list()
@@ -85,7 +85,7 @@ defmodule Swiss.Map do
       ** (KeyError) key :life not found in: %{}
 
   """
-  @spec indif_fetch!(Map.t(), atom()) :: any()
+  @spec indif_fetch!(map(), atom()) :: any()
   def indif_fetch!(map, key) when is_atom(key) do
     Map.get_lazy(map, key, fn ->
       string_key = Atom.to_string(key)
