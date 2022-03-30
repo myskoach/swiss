@@ -103,6 +103,8 @@ defmodule Swiss.Map do
 
   The default behavior is to put unless the value is `nil`.
 
+  `pred` can also be a boolean.
+
   ## Examples
 
       iex> Swiss.Map.put_if(%{life: 42}, :life, 22)
@@ -117,14 +119,22 @@ defmodule Swiss.Map do
       iex> Swiss.Map.put_if(%{life: 42}, :life, 22, &(&1 < 55))
       %{life: 22}
 
+      iex> Swiss.Map.put_if(%{life: 42}, :life, 30, true)
+      %{life: 30}
+
+      iex> Swiss.Map.put_if(%{life: 42}, :life, 30, false)
+      %{life: 42}
   """
-  @spec put_if(map(), any(), any(), (any() -> boolean())) :: map()
-  def put_if(map, key, value, pred \\ fn v -> !is_nil(v) end) do
-    if pred.(value) do
-      Map.put(map, key, value)
-    else
-      map
-    end
+  @spec put_if(map(), any(), any(), (any() -> boolean()) | boolean()) :: map()
+  def put_if(map, key, value, pred \\ fn v -> !is_nil(v) end)
+
+  def put_if(map, key, value, pred) when is_function(pred, 1),
+    do: put_if(map, key, value, pred.(value))
+
+  def put_if(map, key, value, condition) when is_boolean(condition) do
+    if condition,
+      do: Map.put(map, key, value),
+      else: map
   end
 
   @doc """
