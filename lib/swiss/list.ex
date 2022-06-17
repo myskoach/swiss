@@ -1,4 +1,24 @@
 defmodule Swiss.List do
+  @moduledoc "Helper functions for Lists"
+
+  @doc """
+  Returns whether a given value is a non-empty list.
+
+  ## Examples
+      iex> Swiss.List.non_empty?([])
+      false
+
+      iex> Swiss.List.non_empty?([1])
+      true
+
+      iex> Swiss.List.non_empty?(nil)
+      false
+  """
+  @spec non_empty?(value :: any()) :: boolean()
+  def non_empty?(value) when not is_list(value), do: false
+  def non_empty?([]), do: false
+  def non_empty?(_list), do: true
+
   @doc """
   Replaces a value in a list at the position indicated by the given predicate.
 

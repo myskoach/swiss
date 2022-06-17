@@ -209,8 +209,9 @@ defmodule Swiss.Map do
 
   ## Options
 
-  * `max_depth´: Depth at which to cut off at. Defaults to 1.
-  * `placeholder`: Map values that would exceed the maximum depth are replaced by a placeholder. Defaults to an empty map.
+  * `max_depth`: Depth at which to cut off at. Defaults to 1.
+  * `placeholder`: Map values that would exceed the maximum depth are replaced
+    by a placeholder. Defaults to an empty map.
 
   ## Examples
 
