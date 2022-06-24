@@ -2,7 +2,7 @@ defmodule Swiss.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/myskoach/swiss"
-  @version "3.12.0"
+  @version "3.13.0"
 
   def project do
     [
