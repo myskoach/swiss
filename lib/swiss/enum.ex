@@ -67,6 +67,7 @@ defmodule Swiss.Enum do
       {nil, nil}
 
   """
+  @spec find_both(Enumerable.t(), (any -> boolean())) :: {any(), non_neg_integer() | nil}
   def find_both(enumerable, fun) do
     enumerable
     |> Stream.with_index()
@@ -75,6 +76,32 @@ defmodule Swiss.Enum do
         do: {:halt, {el, idx}},
         else: {:cont, {nil, nil}}
     end)
+  end
+
+  @doc """
+  Splits an enumerable at the given index, returning both as lists.
+
+  ### Examples
+
+      iex> Swiss.Enum.split_at([42, 44, 46], 1)
+      {[42], [44, 46]}
+
+      iex> Swiss.Enum.split_at([42, 44, 46], 0)
+      {[], [42, 44, 46]}
+
+      iex> Swiss.Enum.split_at([42, 44, 46], 42)
+      {[42, 44, 46], []}
+  """
+  @spec split_at(Enumerable.t(), non_neg_integer()) :: {list(), list()}
+  def split_at(enumerable, at) when is_integer(at) and at >= 0 do
+    {left, right} =
+      enumerable
+      |> Stream.with_index()
+      |> Enum.split_with(fn {_val, idx} -> idx < at end)
+
+    pull_val = &Enum.map(&1, fn {val, _idx} -> val end)
+
+    {pull_val.(left), pull_val.(right)}
   end
 
   @doc """
